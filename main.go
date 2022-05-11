@@ -22,27 +22,6 @@ func main(){
 	utils.LoadConfig()
 	fmt.Println(viper.GetStringMap("postgres"))
 
-	// // 数据库连接测试
-	// issueDB := utils.GetTaskDBConnection()
-	// var issue1 = models.Issue{}
-	// var comments []models.Comment
-	// issue1.ID = 7
-	// issueDB.Find(&issue1)
-	// issueDB.Debug().Joins("left join issues on comments.issue_id = issues.id").Where("issues.id = ?", 7).Find(&comments)
-	// fmt.Println(comments[0])
-
-	// 数据库Migrate
-	// issueDB.AutoMigrate(&models.Issue{})
-	// issueDB.AutoMigrate(&models.Tag{})
-	// issueDB.AutoMigrate(&models.User{})
-	// issueDB.AutoMigrate(&models.Comment{})
-	// issueDB.AutoMigrate(&models.Milestone{})
-
-
-	// 插入数据
-	// issueDB.Create(&models.Issue{Title: "test", Content: "test"})
-	// storageInsert.StorageInsert()
-
 	// 启动Gin
 	router := gin.Default()
 

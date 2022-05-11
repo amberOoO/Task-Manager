@@ -15,7 +15,6 @@ type Tag struct {
 	Issues		[]Issue		`gorm:"many2many:issue_tags;"`
 }
 
-
 // 将Tag字符串列表转换为Tag列表
 func StringArrToTagArr(tags []string) []Tag {
 	var tagArr []Tag = make([]Tag, len(tags))

@@ -172,11 +172,11 @@ func (iss *IssueService) GetIssueWithCondition(page int, pageSize int, config Qu
 	// 初始化查询
 	queries = iss._db.Model(&models.Issue{})
 	// 添加tags过滤
-	// if config.Tags != nil && len(config.Tags) != 0 {
-	// 	queries = queries.Preload("Tags", "content in (?)", config.Tags).Joins("Tag", "issue.id = issue_tags.issue_id").Where("tags IN (?)", config.Tags)
-	// }else{
-	// 	queries = queries.Preload("Tags").Model(&models.Issue{})
-	// }
+	if config.Tags != nil && len(config.Tags) != 0 {
+		queries = queries.Preload("Tags", "content in (?)", config.Tags).Joins("left join issue_tags on issues.id = issue_tags.issue_id").Where("issue_tags.tag_content IN (?)", config.Tags)
+	}else{
+		queries = queries.Preload("Tags").Model(&models.Issue{})
+	}
 	// 添加milestone过滤
 	if config.MilestoneIDs != nil && len(config.MilestoneIDs) != 0 {
 		queries = queries.Where("milestone_id IN (?)", config.MilestoneIDs)

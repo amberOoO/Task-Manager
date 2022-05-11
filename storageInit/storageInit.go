@@ -1,11 +1,11 @@
-package storageInsert
+package main
 
 import (
 	"Task-Manager/storage/models"
 	"Task-Manager/utils"
 )
 
-func StorageInsert() {
+func InsertTestData() {
 	issueDB := utils.GetTaskDBConnection()
 	// 创建用户
 	user1 := models.User{Nickname: "testUser1"}
@@ -22,4 +22,22 @@ func StorageInsert() {
 	// 插入Comment数据
 	comment1 := models.Comment{Content: "comment1 content", IssueID: issue1.ID, CreaterID: user1.ID}
 	issueDB.Create(&comment1)
+}
+
+func DBInit() {
+	// 数据库连接测试
+	issueDB := utils.GetTaskDBConnection()
+
+	// 数据库Migrate
+	issueDB.AutoMigrate(&models.Issue{})
+	issueDB.AutoMigrate(&models.Tag{})
+	issueDB.AutoMigrate(&models.User{})
+	issueDB.AutoMigrate(&models.Comment{})
+	issueDB.AutoMigrate(&models.Milestone{})
+}
+
+func main() {
+	DBInit()
+	// 插入数据
+	// InsertTestData()
 }
