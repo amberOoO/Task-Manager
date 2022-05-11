@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"sync"
 	"fmt"
+	"sync"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
@@ -27,7 +27,7 @@ func LoadConfig() {
 var load_issue_db_once sync.Once
 var issue_db *gorm.DB
 
-func GetIssueDBConnection() *gorm.DB{
+func GetTaskDBConnection() *gorm.DB{
 	load_issue_db_once.Do(func() {
 		meta := viper.GetStringMapString("postgres")
 		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
@@ -39,7 +39,9 @@ func GetIssueDBConnection() *gorm.DB{
 		fmt.Println(dsn)
 		var err error
 		if issue_db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-			Logger: logger.Default.LogMode(logger.Warn),
+			// Logger: logger.Default.LogMode(logger.Warn),
+			DisableForeignKeyConstraintWhenMigrating: true,
+			Logger: logger.Default.LogMode(logger.Info),
 		}); err != nil {
 			panic(err)
 		}
