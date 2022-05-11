@@ -67,7 +67,7 @@ func (ms *MilestoneService) DeleteMilestone(milestone *models.Milestone) error {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("milestone not found")
 		}else{
-			return errors.New("milestone update failed")
+			return errors.New("milestone delete failed")
 		}
 	}
 	// 将issue表中，milestone关联的record恢复默认值0

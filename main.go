@@ -51,6 +51,8 @@ func main(){
 	router.POST("/updateIssue", view.UpdateIssue)
 	// 更新issueTags接口
 	router.POST("/updateIssueTags", view.UpdateIssueTags)
+	// 更新issueMilestone接口
+	router.POST("/updateIssueMilestone", view.UpdateIssueMilestone)
 	// 删除issue接口
 	router.POST("/deleteIssue", view.DeleteIssue)
 

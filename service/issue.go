@@ -110,7 +110,7 @@ func (iss *IssueService) UpdateIssueTags(issue *models.Issue) error {
 }
 
 func (iss *IssueService) DeleteIssue(issue *models.Issue) error {
-	// 判断issue是否存在
+	// 级联删除issue_tag表
 	err := iss._db.Preload("Tags").First(&issue).Error
 	if err != nil {
 		// TODO: 初始err加入日志
@@ -122,6 +122,37 @@ func (iss *IssueService) DeleteIssue(issue *models.Issue) error {
 	err = iss._db.Select(clause.Associations).Delete(&issue).Error
 	if err != nil {
 		err = errors.New("issue delete failed")
+	}
+	return err
+}
+
+func (iss *IssueService) UpdateMilestone(issue *models.Issue, milestoneID uint) error {
+	// 查看issue是否存在
+	err := iss._db.First(issue).Error
+	if err != nil {
+		// TODO: 初始err加入日志
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = errors.New("issue not found")
+		}else{
+			err = errors.New("issue update failed")
+		}
+		return err
+	}
+	// 查看milestone是否存在
+	err = iss._db.First(&models.Milestone{}, milestoneID).Error
+	if err != nil {
+		// TODO: 初始err加入日志
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = errors.New("milestone not found")
+		}else{
+			err = errors.New("issue update failed")
+		}
+		return err
+	}
+	// 开始更新milestone
+	err = iss._db.Model(issue).Update("milestone_id", milestoneID).Error
+	if err != nil {
+		err = errors.New("issue update failed")
 	}
 	return err
 }

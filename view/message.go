@@ -28,6 +28,11 @@ type UpdateIssueMsg struct {
 	MilestoneID	uint		`json:"milestoneID"`
 }
 
+type UpdateIssueMilestoneMsg struct {
+	ID			uint		`json:"id"`
+	MilestoneID	uint		`json:"milestoneID"`
+}
+
 type UpdateIssueTagsMsg struct {
 	ID			uint		`json:"id"`
 	Tags		[]string	`json:"tags"`
