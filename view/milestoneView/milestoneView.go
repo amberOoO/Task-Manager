@@ -1,4 +1,4 @@
-package view
+package milestoneView
 
 import (
 	"Task-Manager/service"

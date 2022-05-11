@@ -157,6 +157,60 @@ func (iss *IssueService) UpdateMilestone(issue *models.Issue, milestoneID uint) 
 	return err
 }
 
+// 查询条件
+type QueryConfig struct {
+	Tags		 []string
+	MilestoneIDs []uint
+}
+
+func (iss *IssueService) GetIssueWithCondition(page int, pageSize int, config QueryConfig) ([]models.Issue, int64, error) {
+	var (
+		issues   []models.Issue
+		queries  *gorm.DB
+		totalNum int64
+	)
+	// 初始化查询
+	queries = iss._db.Model(&models.Issue{})
+	// 添加tags过滤
+	// if config.Tags != nil && len(config.Tags) != 0 {
+	// 	queries = queries.Preload("Tags", "content in (?)", config.Tags).Joins("Tag", "issue.id = issue_tags.issue_id").Where("tags IN (?)", config.Tags)
+	// }else{
+	// 	queries = queries.Preload("Tags").Model(&models.Issue{})
+	// }
+	// 添加milestone过滤
+	if config.MilestoneIDs != nil && len(config.MilestoneIDs) != 0 {
+		queries = queries.Where("milestone_id IN (?)", config.MilestoneIDs)
+	}
+	// 加入分页选项
+	queries = queries.Limit(pageSize).Offset((page - 1) * pageSize)
+
+	// 开始查询数据
+	// 获取数量
+	err := queries.Count(&totalNum).Error
+	if err != nil {
+		// return issues, 0, errors.New("issue get failed")
+		return issues, 0, err
+	}
+	// 获取数据
+	err = queries.Find(&issues).Error
+	if err != nil {
+		err = errors.New("issue get failed")
+	}
+	return issues, totalNum, err
+}
+
+func (iss *IssueService) GetTotalNum() (int64, error) {
+	var (
+		err 	 error
+		totalNum int64
+	)
+	err = iss._db.Model(&models.Issue{}).Count(&totalNum).Error
+	if err != nil {
+		err = errors.New("issue total num get failed")
+	}
+	return totalNum, err
+}
+
 func (iss *IssueService) GetIssueByID(id uint) (*models.Issue, error) {
 	var issue models.Issue
 	err := iss._db.First(&issue, id).Error

@@ -1,4 +1,4 @@
-package view
+package commentView
 
 import (
 	"Task-Manager/storage/models"

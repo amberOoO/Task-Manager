@@ -1,4 +1,4 @@
-package view
+package issueView
 
 import (
 	"Task-Manager/service"
@@ -141,4 +141,34 @@ func DeleteIssue(c *gin.Context) {
 	}
 	// 返回成功结果
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "data": issue.ToJson()["tags"]})
+}
+
+func GetIssueWithCondition(c *gin.Context) {
+	var (
+		json		 GetIssueWithConditionMsg
+	)
+	if err := c.ShouldBindBodyWith(&json, binding.JSON); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "data format error"})
+		return
+	}
+
+	issueService := service.NewIssueService()
+	issues, totalNum, err := issueService.GetIssueWithCondition(json.Page, json.PageSize, service.QueryConfig{
+		Tags: 			json.Tags,
+		MilestoneIDs: 	json.MilestoneIDs,
+	})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
+		return
+	}
+	// 准备返回结果
+	queryResults := make([]map[string]interface{}, len(issues))
+	for index, issue := range issues {
+		queryResults[index] = issue.ToJson()
+	}
+	// 返回成功结果
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "data": map[string]interface{}{
+		"total": totalNum,
+		"results": queryResults,
+	}})
 }

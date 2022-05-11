@@ -3,7 +3,11 @@ package main
 import (
 	// "Task-Manager/storage/models"
 	"Task-Manager/utils"
-	"Task-Manager/view"
+	"Task-Manager/view/userView"
+	"Task-Manager/view/issueView"
+	"Task-Manager/view/milestoneView"
+	"Task-Manager/view/commentView"
+	"Task-Manager/view/tagView"
 	"fmt"
 
 	// "Task-Manager/storage/models"
@@ -42,32 +46,39 @@ func main(){
 	// 启动Gin
 	router := gin.Default()
 
+	/******* user *******/
 	// 创建用户接口
-	router.POST("/createUser", view.CreateUser)
+	router.POST("/user/create", userView.CreateUser)
 
+	/******* issue *******/
 	// 创建issue接口
-	router.POST("/createIssue", view.CreateIssue)
+	router.POST("/issue/create", issueView.CreateIssue)
 	// 更新issue接口
-	router.POST("/updateIssue", view.UpdateIssue)
+	router.POST("/issue/update", issueView.UpdateIssue)
 	// 更新issueTags接口
-	router.POST("/updateIssueTags", view.UpdateIssueTags)
+	router.POST("/issue/updateTags", issueView.UpdateIssueTags)
 	// 更新issueMilestone接口
-	router.POST("/updateIssueMilestone", view.UpdateIssueMilestone)
+	router.POST("/issue/updateMilestone", issueView.UpdateIssueMilestone)
 	// 删除issue接口
-	router.POST("/deleteIssue", view.DeleteIssue)
+	router.POST("/issue/delete", issueView.DeleteIssue)
+	// 分页获取issue接口
+	router.POST("/issue/getIssueWithCondition", issueView.GetIssueWithCondition)
 
-	// 创建comment接口
-	router.POST("/createComment", view.CreateComment)
-
-	// 创建tag接口
-	router.POST("/createTag", view.CreateTag)
-
+	/******* milestone *******/
 	// 创建milestone接口
-	router.POST("/createMilestone", view.CreateMilestone)
+	router.POST("/milestone/create", milestoneView.CreateMilestone)
 	// 更新milestone接口
-	router.POST("/updateMilestone", view.UpdateMilestone)
+	router.POST("/milestone/update", milestoneView.UpdateMilestone)
 	// 删除milestone接口
-	router.POST("/deleteMilestone", view.DeleteMilestone)
+	router.POST("/milestone/delete", milestoneView.DeleteMilestone)
+
+	/******* comment *******/
+	// 创建comment接口
+	router.POST("/comment/create", commentView.CreateComment)
+
+	/******* tag *******/
+	// 创建tag接口
+	router.POST("/tag/create", tagView.CreateTag)
 
 	router.Run("0.0.0.0:8888")
 }

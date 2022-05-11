@@ -1,4 +1,4 @@
-package view
+package tagView
 
 import (
 	"Task-Manager/storage/models"
