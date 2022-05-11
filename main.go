@@ -62,6 +62,10 @@ func main(){
 
 	// 创建milestone接口
 	router.POST("/createMilestone", view.CreateMilestone)
+	// 更新milestone接口
+	router.POST("/updateMilestone", view.UpdateMilestone)
+	// 删除milestone接口
+	router.POST("/deleteMilestone", view.DeleteMilestone)
 
 	router.Run("0.0.0.0:8888")
 }

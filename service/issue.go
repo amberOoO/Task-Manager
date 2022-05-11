@@ -50,8 +50,11 @@ func (iss *IssueService) CreateIssue(issue *models.Issue) error {
 }
 
 func (iss *IssueService) UpdateIssue(issue *models.Issue) error {
+	var (
+		issueID uint = issue.ID
+	)
 	// 判断是否存在issue
-	err := iss._db.First(&models.Issue{}, issue.ID).Error
+	err := iss._db.First(&models.Issue{}, issueID).Error
 	if err != nil{
 		// TODO: 初始err加入日志
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -80,8 +83,8 @@ func (iss *IssueService) UpdateIssue(issue *models.Issue) error {
 			return err
 		}
 	}
-
-	err = iss._db.Save(&issue).Error
+	
+	err = iss._db.Model(&issue).Updates(&issue).Error
 	if err != nil {
 		err = errors.New("issue update failed")
 	}
