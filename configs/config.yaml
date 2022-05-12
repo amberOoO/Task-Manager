@@ -1,0 +1,6 @@
+postgres:
+  host: 123.56.116.164
+  port: 5432
+  user: postgres
+  pwd: 
+  db: issue
